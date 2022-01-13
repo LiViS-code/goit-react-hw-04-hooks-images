@@ -19,7 +19,7 @@ export default function App() {
   const [shownModal, setShownModal] = useState(false);
   const [largePictureSRC, setLargePictureSRC] = useState("");
 
-  const handleSubmit = (request) => {
+  const onSubmit = (request) => {
     if (error) setError("");
     setRequest(request);
     setPage(1);
@@ -72,7 +72,7 @@ export default function App() {
         <Logo src={logo} alt="logo" width="50px" />
         Image Finder
       </Title>
-      <Searchbar onSubmit={handleSubmit} />
+      <Searchbar onSubmit={onSubmit} />
       {error && <NotFound src={notFound} alt="Images not found!" />}
       <ImageGallery
         request={request}
