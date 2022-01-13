@@ -10,7 +10,7 @@ import {
   SearchFormInput,
 } from "./Searchber.styled";
 
-export default function Searchbar({ handleSubmit }) {
+export default function Searchbar({ onSubmit }) {
   const [request, setRequest] = useState("");
 
   const handleRequestChange = (e) => {
@@ -20,12 +20,14 @@ export default function Searchbar({ handleSubmit }) {
   const handleRequestSubmit = (e) => {
     e.preventDefault();
 
-    if (request.trim() === "") {
+    setRequest(request.trim());
+
+    if (request === "") {
       toastMsg("Enter some kind of request", "warn");
       return;
     }
 
-    handleSubmit(request.trim());
+    onSubmit(request);
     setRequest("");
   };
 
