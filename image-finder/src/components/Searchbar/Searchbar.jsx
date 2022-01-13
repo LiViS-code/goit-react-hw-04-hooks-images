@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import { FcSearch } from "react-icons/fc";
 import toastMsg from "../../utils/toastMsg";
@@ -10,60 +10,46 @@ import {
   SearchFormInput,
 } from "./Searchber.styled";
 
-class Searchbar extends Component {
-  state = {
-    request: "",
+export default function Searchbar({ handleSubmit }) {
+  const [request, setRequest] = useState("");
+
+  const handleRequestChange = (e) => {
+    setRequest(e.target.value.toLowerCase());
   };
 
-  static propTypes = {
-    onSubmit: PropTypes.func.isRequired,
-  };
-
-  handleRequestChange = (e) => {
-    const request = e.target.value.toLowerCase();
-    this.setState({ request });
-  };
-
-  handleRequestSubmit = (e) => {
+  const handleRequestSubmit = (e) => {
     e.preventDefault();
-    const { request } = this.state;
 
     if (request.trim() === "") {
       toastMsg("Enter some kind of request", "warn");
       return;
     }
 
-    this.props.onSubmit(request.trim());
-    this.setState({ request: "" });
+    handleSubmit(request.trim());
+    setRequest("");
   };
 
-  render() {
-    const {
-      handleRequestSubmit,
-      handleRequestChange,
-      state: { request },
-    } = this;
-    return (
-      <SearchbarHdr>
-        <SearchForm onSubmit={handleRequestSubmit}>
-          <SearchFormButton type="submit">
-            <SerchFormButtonLabel>
-              <FcSearch />
-            </SerchFormButtonLabel>
-          </SearchFormButton>
-
-          <SearchFormInput
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            value={request}
-            onChange={handleRequestChange}
-          />
-        </SearchForm>
-      </SearchbarHdr>
-    );
-  }
+  return (
+    <SearchbarHdr>
+      <SearchForm onSubmit={handleRequestSubmit}>
+        <SearchFormButton type="submit">
+          <SerchFormButtonLabel>
+            <FcSearch />
+          </SerchFormButtonLabel>
+        </SearchFormButton>
+        <SearchFormInput
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+          value={request}
+          onChange={handleRequestChange}
+        />
+      </SearchForm>
+    </SearchbarHdr>
+  );
 }
 
-export default Searchbar;
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
