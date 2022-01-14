@@ -17,13 +17,13 @@ export default function App() {
   const [page, setPage] = useState(1);
   const [maxPageCount, setMaxPageCount] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
   const [shownModal, setShownModal] = useState(false);
   const [largePictureSRC, setLargePictureSRC] = useState("");
   const countPictures = useRef(0);
 
   const onSubmit = (request) => {
-    if (error) setError("");
+    if (error) setError(null);
     setRequest(request.trim());
     setPage(1);
   };
@@ -109,7 +109,7 @@ export default function App() {
     setMaxPageCount(1);
     if (error) {
       toastMsg(`Error: ${error}`, "error");
-      setError("");
+      setError(error);
       return;
     }
   }, [error]);
