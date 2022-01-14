@@ -8,17 +8,11 @@ export default function Modal({ largePictureSRC, closeModal }) {
 
   useEffect(() => {
     setShownLoad(true);
-
     const escFunction = (e) => {
       if (e.keyCode === 27) {
         closeModal(true);
       }
     };
-
-    setTimeout(() => {
-      setShownLoad(false);
-    }, 300);
-
     document.addEventListener("keydown", escFunction);
 
     return () => {
@@ -33,7 +27,11 @@ export default function Modal({ largePictureSRC, closeModal }) {
   return (
     <Backdrop onClick={handleClick}>
       {shownLoad && <LoaderBox loading={shownLoad} />}
-      <Picture src={largePictureSRC} width="100%" />
+      <Picture
+        src={largePictureSRC}
+        width="100%"
+        onLoad={() => setShownLoad(false)}
+      />
     </Backdrop>
   );
 }
