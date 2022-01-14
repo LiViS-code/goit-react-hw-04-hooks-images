@@ -17,7 +17,6 @@ export default function LoaderBox({ loading }) {
           color={accentColor}
           height={100}
           width={150}
-          timeout={3000}
           visible={loading}
         />
       </Wrapper>
