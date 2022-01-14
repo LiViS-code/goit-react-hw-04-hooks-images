@@ -21,7 +21,7 @@ export default function Modal({ largePictureSRC, closeModal }) {
   }, [closeModal]);
 
   const handleClick = (e) => {
-    if (e.target.tagName === "DIV") return closeModal(true);
+    if (e.target.tagName !== "IMG") return closeModal(true);
   };
 
   return (
