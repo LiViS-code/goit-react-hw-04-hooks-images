@@ -1,58 +1,44 @@
-import React, { Component } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Backdrop, Picture } from "./Modal.styled";
 import LoaderBox from "../Loader/LoaderBox";
 
-export default class Modal extends Component {
-  static propTypes = {
-    largePictureSRC: PropTypes.string.isRequired,
-    closeModal: PropTypes.func.isRequired,
+export default function Modal({ largePictureSRC, closeModal }) {
+  const [shownLoad, setShownLoad] = useState(false);
+
+  useEffect(() => {
+    setShownLoad(true);
+
+    const escFunction = (e) => {
+      if (e.keyCode === 27) {
+        closeModal(true);
+      }
+    };
+
+    setTimeout(() => {
+      setShownLoad(false);
+    }, 300);
+
+    document.addEventListener("keydown", escFunction);
+
+    return () => {
+      document.removeEventListener("keydown", escFunction);
+    };
+  }, [closeModal]);
+
+  const handleClick = (e) => {
+    if (e.target.tagName === "DIV") return closeModal(true);
   };
 
-  state = {
-    shownLoad: true,
-    src: "",
-  };
-
-  handleClick = (e) => {
-    if (e.target.tagName === "DIV") return this.props.closeModal(true);
-  };
-
-  componentDidMount() {
-    document.addEventListener("keydown", this.escFunction);
-    this.setState({ src: this.props.largePictureSRC });
-  }
-
-  componentDidUpdate(_, prevState) {
-    if (prevState.src !== this.state.src) {
-      setTimeout(() => {
-        this.setState({ shownLoad: false });
-      }, 300);
-      return;
-    }
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener("keydown", this.escFunction);
-  }
-
-  escFunction = (e) => {
-    if (e.keyCode === 27) {
-      this.props.closeModal(true);
-    }
-  };
-
-  render() {
-    const {
-      handleClick,
-      state: { shownLoad, src },
-    } = this;
-
-    return (
-      <Backdrop onClick={handleClick}>
-        {shownLoad && <LoaderBox loading={shownLoad} />}
-        <Picture src={src} width="100%" />
-      </Backdrop>
-    );
-  }
+  return (
+    <Backdrop onClick={handleClick}>
+      {shownLoad && <LoaderBox loading={shownLoad} />}
+      <Picture src={largePictureSRC} width="100%" />
+    </Backdrop>
+  );
 }
+
+Modal.propTypes = {
+  largePictureSRC: PropTypes.string.isRequired,
+  closeModal: PropTypes.func.isRequired,
+};
