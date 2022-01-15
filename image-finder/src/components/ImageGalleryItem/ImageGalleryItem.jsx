@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { GalleryItem, GalleryItemImage } from "./ImageGalleryItem.styled";
 
-export default function ImageGalleryItem({ pictures, elemToScroll }) {
+export default function ImageGalleryItem({ pictures }) {
   return (
     <>
       {pictures.map(({ id, largeImageURL, webformatURL, tags }) => (
@@ -10,7 +10,6 @@ export default function ImageGalleryItem({ pictures, elemToScroll }) {
             src={webformatURL}
             alt={tags}
             data-large={largeImageURL}
-            ref={elemToScroll}
           />
         </GalleryItem>
       ))}

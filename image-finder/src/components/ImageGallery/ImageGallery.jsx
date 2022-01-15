@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import ImageGalleryItem from "../ImageGalleryItem/ImageGalleryItem";
 import { GalleryList } from "./ImageGallery.styled";
 
-export default function ImageGallery({ pictures, onModal, elemToScroll }) {
+export default function ImageGallery({ pictures, onModal }) {
   const handleClick = (e) => {
     if (!e.target.dataset.large) return;
     onModal(e.target.dataset.large);
@@ -10,7 +10,7 @@ export default function ImageGallery({ pictures, onModal, elemToScroll }) {
 
   return (
     <GalleryList onClick={handleClick}>
-      <ImageGalleryItem pictures={pictures} elemToScroll={elemToScroll} />
+      <ImageGalleryItem pictures={pictures} />
     </GalleryList>
   );
 }

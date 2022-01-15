@@ -21,7 +21,6 @@ export default function App() {
   const [shownModal, setShownModal] = useState(false);
   const [largePictureSRC, setLargePictureSRC] = useState("");
   const countPictures = useRef(0);
-  const elemToScroll = useRef(null);
 
   const onSubmit = (request) => {
     if (error) setError(null);
@@ -46,16 +45,15 @@ export default function App() {
 
   useEffect(() => {
     if (!pictures.length) return;
-    // const refGalleryItem = document.querySelectorAll("img[data-large]");
-    // console.log(`elemToScroll`, elemToScroll.current);
+    const refGalleryItem = document.querySelectorAll("img[data-large]");
     if (pictures.length > perPage) {
-      elemToScroll.current.scrollIntoView({
+      refGalleryItem[pictures.length - countPictures.current].scrollIntoView({
         block: "start",
         behavior: "smooth",
       });
 
       // move it down 100 pixels because top header sticker overlaps
-      // window.scrollBy(0, -100);
+      window.scrollBy(0, -100);
     }
     countPictures.current = pictures.length;
   }, [pictures.length]);
@@ -118,11 +116,7 @@ export default function App() {
       </Title>
       <Searchbar onSubmit={onSubmit} />
       {error && <NotFound src={notFound} alt="Images not found!" />}
-      <ImageGallery
-        pictures={pictures}
-        onModal={onModal}
-        elemToScroll={elemToScroll}
-      />
+      <ImageGallery pictures={pictures} onModal={onModal} />
       {shownModal && (
         <Modal largePictureSRC={largePictureSRC} closeModal={closeModal} />
       )}
