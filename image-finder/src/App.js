@@ -11,7 +11,7 @@ import Modal from "./components/Modal/Modal";
 import getPictures from "./utils/getPictures";
 
 export default function App() {
-  const perPage = 12;
+  const perPage = 12; // The number of displayed objects. Used also for correct auto scrolling
   const [request, setRequest] = useState("");
   const [pictures, setPictures] = useState([]);
   const [page, setPage] = useState(1);
@@ -21,6 +21,7 @@ export default function App() {
   const [shownModal, setShownModal] = useState(false);
   const [largePictureSRC, setLargePictureSRC] = useState("");
   const countPictures = useRef(0);
+  const elemToScroll = useRef(null);
 
   const onSubmit = (request) => {
     if (error) setError(null);
@@ -45,9 +46,9 @@ export default function App() {
 
   useEffect(() => {
     if (!pictures.length) return;
-    const refGalleryItem = document.querySelectorAll("img[data-large]");
+
     if (pictures.length > perPage) {
-      refGalleryItem[refGalleryItem.length - perPage].scrollIntoView({
+      elemToScroll.current.scrollIntoView({
         block: "start",
         behavior: "smooth",
       });
@@ -70,8 +71,11 @@ export default function App() {
           throw error;
         }
 
-        if (page > 1) setPictures((pictures) => [...pictures, ...pic.hits]);
-        else setPictures([...pic.hits]);
+        if (page > 1) {
+          setPictures((pictures) => [...pictures, ...pic.hits]);
+        } else {
+          setPictures([...pic.hits]);
+        }
 
         setMaxPageCount(Math.ceil(pic.total / perPage));
 
@@ -116,7 +120,12 @@ export default function App() {
       </Title>
       <Searchbar onSubmit={onSubmit} />
       {error && <NotFound src={notFound} alt="Images not found!" />}
-      <ImageGallery pictures={pictures} onModal={onModal} />
+      <ImageGallery
+        pictures={pictures}
+        onModal={onModal}
+        elemToScroll={elemToScroll}
+        perPage={perPage}
+      />
       {shownModal && (
         <Modal largePictureSRC={largePictureSRC} closeModal={closeModal} />
       )}
