@@ -17,7 +17,7 @@ export const Container = styled.div`
 
 export const Wrapper = styled.div`
   display: inline-block;
-  position: absolute;
+  position: fixed;
   bottom: 50%;
   left: 50%;
   transform: translate3d(-50%, 50%, 0);
