@@ -21,6 +21,7 @@ export default function App() {
   const [shownModal, setShownModal] = useState(false);
   const [largePictureSRC, setLargePictureSRC] = useState("");
   const countPictures = useRef(0);
+  const elemToScroll = useRef(null);
 
   const onSubmit = (request) => {
     if (error) setError(null);
@@ -44,15 +45,17 @@ export default function App() {
   const isBtnShown = pictures.length && page < maxPageCount ? true : false;
 
   useEffect(() => {
-    const refGalleryItem = document.querySelectorAll("img[data-large]");
+    if (!pictures.length) return;
+    // const refGalleryItem = document.querySelectorAll("img[data-large]");
+    // console.log(`elemToScroll`, elemToScroll.current);
     if (pictures.length > perPage) {
-      refGalleryItem[refGalleryItem.length - perPage].scrollIntoView({
+      elemToScroll.current.scrollIntoView({
         block: "start",
         behavior: "smooth",
       });
 
       // move it down 100 pixels because top header sticker overlaps
-      window.scrollBy(0, -100);
+      // window.scrollBy(0, -100);
     }
     countPictures.current = pictures.length;
   }, [pictures.length]);
@@ -68,6 +71,7 @@ export default function App() {
           const error = `No results were found for "${request.toUpperCase()}"`;
           throw error;
         }
+
         if (page > 1) setPictures((pictures) => [...pictures, ...pic.hits]);
         else setPictures([...pic.hits]);
 
@@ -97,22 +101,14 @@ export default function App() {
       })
       .catch((error) => {
         setError(error);
+        setPictures([]);
+        setMaxPageCount(1);
+        toastMsg(`Error: ${error}`, "error");
       })
       .finally(() => {
         setLoading(false);
       });
   }, [request, page]);
-
-  useEffect(() => {
-    setError(error);
-    setPictures([]);
-    setMaxPageCount(1);
-    if (error) {
-      toastMsg(`Error: ${error}`, "error");
-      setError(error);
-      return;
-    }
-  }, [error]);
 
   return (
     <Container>
@@ -122,7 +118,11 @@ export default function App() {
       </Title>
       <Searchbar onSubmit={onSubmit} />
       {error && <NotFound src={notFound} alt="Images not found!" />}
-      <ImageGallery pictures={pictures} onModal={onModal} />
+      <ImageGallery
+        pictures={pictures}
+        onModal={onModal}
+        elemToScroll={elemToScroll}
+      />
       {shownModal && (
         <Modal largePictureSRC={largePictureSRC} closeModal={closeModal} />
       )}
