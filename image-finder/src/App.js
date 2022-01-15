@@ -47,7 +47,7 @@ export default function App() {
     if (!pictures.length) return;
     const refGalleryItem = document.querySelectorAll("img[data-large]");
     if (pictures.length > perPage) {
-      refGalleryItem[pictures.length - countPictures.current].scrollIntoView({
+      refGalleryItem[refGalleryItem.length - perPage].scrollIntoView({
         block: "start",
         behavior: "smooth",
       });
